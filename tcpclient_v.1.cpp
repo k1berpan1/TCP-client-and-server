@@ -13,7 +13,6 @@ void str_cli(FILE *fp, int sockfd){
     char sendline[MAXLINE], reciveline[MAXLINE];
     memset(sendline, 0, sizeof(sendline));
     memset(reciveline, 0, sizeof(reciveline));
-    std::cout<< "Message to server: "; 
 
     while (fgets(sendline, MAXLINE, fp) != NULL){
     
@@ -22,11 +21,9 @@ void str_cli(FILE *fp, int sockfd){
             perror("server terminated prematurely: ");
             exit(0);
         }
-        std::cout<< "Message from server: " <<reciveline<< std::endl; 
-        //fputs(reciveline, stdout);
+        std::cout<<reciveline<< std::endl; 
         memset(sendline, 0, sizeof(sendline));
         memset(reciveline, 0, sizeof(reciveline));
-        std::cout<< "Message to server: "; 
     }
 }
 
@@ -34,10 +31,9 @@ void str_cli(FILE *fp, int sockfd){
 int main(){
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if(sockfd < 0){
-        std::cout<< "socket opening error"<<std::endl;
         exit(1);
     }
-    std::cout<< "socket is opened"<<std::endl;
+
 
     sockaddr_in adress;
     memset(&adress, 0, sizeof(adress));
@@ -49,7 +45,6 @@ int main(){
         perror("connect func error: ");
         exit(1);
     }
-    std::cout<< "client is connected to serv"<<std::endl;
     str_cli(stdin, sockfd);
     exit(0);
 }

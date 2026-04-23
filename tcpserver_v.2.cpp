@@ -31,7 +31,6 @@ public:
         ssize_t n = 0;
         char buf[MAXLINE];
         while((n = read(sockfd, buf, MAXLINE)) > 0) {
-            std::cout<< "Message from client: "; 
             std::cout<<std::string_view{buf, n} <<std::endl; 
             write(sockfd, buf, n);
         }
@@ -62,22 +61,18 @@ public:
         return -1;
         }
     
-        std::cout << "Сервер запущен на порту " << SERV_PORT << std::endl;
         
         while(true) {
             clilen = sizeof(cliaddr);
             connfd = accept(listenfd, (struct sockaddr*)&cliaddr, &clilen); 
             if(connfd  == -1){
-                std::cout << "Клиент не подключился"  << std::endl;
                 exit(2);
             }
         
-            std::cout << "Клиент подключился"  << std::endl;
             if((childpid = fork()) == 0) {
                 prctl (PR_SET_PDEATHSIG, SIGUSR1); 
                 close(listenfd);
                 str_echo(connfd);
-                std::cout << "Клиент отключился"  << std::endl;
                 _exit(0);
             }
             processees.push_back(childpid);
@@ -106,8 +101,6 @@ tcpserv::tcpserv()
 tcpserv::~tcpserv()
 {
     kill_all(processees);
-    std::cout << "Сработал деструктор"  << std::endl;
-
 }
 
 

@@ -50,7 +50,6 @@ void tcpclient::create_socket(int family, int type, int protocols){
 
     sockfd = socket(family, type, protocols);
     if(sockfd < 0){
-        std::cout<< "socket opening error"<<std::endl;
         exit(1);
     }
 }
@@ -65,7 +64,6 @@ void tcpclient::connect_socket(){
             perror("connect func error: ");
             exit(1);
         }
-        std::cout<< "client is connected to serv: "<< sockfd<<std::endl;
     }
 }
 
@@ -74,17 +72,16 @@ void tcpclient::str_cli(std::string message){
     memset(sendline, 0, sizeof(sendline));
     memset(reciveline, 0, sizeof(reciveline));
     strcpy(sendline, message.c_str());
-    std::cout<< "Message from socket: " << sockfd<< " to server: "<<std::string_view{sendline,strlen(sendline)}<< std::endl; 
     write(sockfd, sendline, strlen(sendline));
     if (read(sockfd, reciveline, MAXLINE) == 0){
         perror("server terminated prematurely: ");
         exit(0);
     }
-    std::cout<< "Message from server: " <<std::string_view{reciveline,strlen(sendline)}<< std::endl;    
+    std::cout <<std::string_view{reciveline,strlen(sendline)}<< std::endl;    
 }
 
 void tcpclient::close_socket(){
-    std::cout<< "socket is closed: "<< sockfd<<std::endl;
+
     close(sockfd);
 }
 

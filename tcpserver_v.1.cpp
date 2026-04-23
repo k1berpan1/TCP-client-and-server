@@ -15,7 +15,6 @@
 std::vector<pid_t> connected_clients;
 
 
-
 const int MAXLINE = 1024;
 const int LISTENQ = 10;
 const int SERV_PORT = 8080;
@@ -24,7 +23,6 @@ void str_echo(int sockfd) {
     ssize_t n = 0;
     char buf[MAXLINE];
     while((n = read(sockfd, buf, MAXLINE)) > 0) {
-        std::cout<< "Message from client: "; 
         std::cout<<std::string_view{buf, n} <<std::endl; 
         write(sockfd, buf, n);
     }
@@ -37,13 +35,8 @@ void kill_all(int sig){
         kill(connected_clients.back(),SIGKILL);
         connected_clients.pop_back();
     }
-    std::cout<< "Exit "; 
-
     exit(0);
 }
-
-
-
 
 
 int main() {
@@ -79,22 +72,17 @@ int main() {
         return -1;
     }
     
-    std::cout << "Сервер запущен на порту " << SERV_PORT << std::endl;
     
     while(true) {
         clilen = sizeof(cliaddr);
         connfd = accept(listenfd, (struct sockaddr*)&cliaddr, &clilen); 
         if(connfd  == -1){
-            std::cout << "Клиент не подключился"  << std::endl;
             exit(2);
         }
       
-        std::cout << "Клиент подключился на сокете" <<std::endl;
         if((childpid = fork()) == 0) {
-            //prctl (PR_SET_PDEATHSIG, SIGUSR1); 
             close(listenfd);
             str_echo(connfd);
-            std::cout << "Клиент отключился"  << std::endl;
             _exit(0);
         }
         connected_clients.push_back(childpid);
@@ -102,7 +90,6 @@ int main() {
             perror("error in fork: ");
         
         close(connfd);
-
 
     }
     
